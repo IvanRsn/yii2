@@ -1,0 +1,5 @@
+/.vscode
+/logs
+/app/vendor/
+/app/phpunit.xml
+/app/.deptrac.cache
