@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  yii2-nginx-php-fpm:
+    hostname: yii2-php-server
+    container_name: yii2-nginx-php-fpm
+    build:
+      context: ./../
+      dockerfile: ./docker/nginx-php-fpm/Dockerfile
+      args:
+        - PUID=${PUID}
+        - PGID=${PGID}
+        - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+    environment:
+      PHP_IDE_CONFIG: "serverName=Docker"
+    volumes:
+      - ./../app:/var/www:cached
+      - vendor2:/var/www/vendor
+      - cache2:/var/www/var/cache
+    ports:
+      - ${NGINX_HOST_HTTP_PORT}:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+
+  yii2-mysql:
+    container_name: yii2-mysql
+    build:
+      context: ./mysql
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - db_data_yii2:/var/lib/postgresql/data:rw
+
+volumes:
+  vendor2:
+  cache2:
+  db_data_yii2:
