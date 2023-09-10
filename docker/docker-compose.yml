@@ -12,7 +12,7 @@ services:
         - PGID=${PGID}
         - INSTALL_XDEBUG=${INSTALL_XDEBUG}
     environment:
-      PHP_IDE_CONFIG: "serverName=Docker"
+      PHP_IDE_CONFIG: "serverName=DockerYII2"
     volumes:
       - ./../app:/var/www:cached
       - vendor2:/var/www/vendor
@@ -29,13 +29,14 @@ services:
     build:
       context: ./mysql
     ports:
-      - ${POSTGRES_PORT}:5432
+      - ${MYSQL_PORT}:3306
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - db_data_yii2:/var/lib/postgresql/data:rw
+      - db_data_yii2:/var/lib/mysql:rw
 
 volumes:
   vendor2:
