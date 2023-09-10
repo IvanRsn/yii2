@@ -3,7 +3,7 @@
 ##################
 
 DOCKER_COMPOSE = docker-compose -f ./docker/docker-compose.yml
-DOCKER_COMPOSE_PHP_FPM_EXEC = ${DOCKER_COMPOSE} exec -u www-data qvote-nginx-php-fpm
+DOCKER_COMPOSE_PHP_FPM_EXEC = ${DOCKER_COMPOSE} exec -u www-data yii2-nginx-php-fpm
 
 ##################
 # Docker compose
@@ -44,29 +44,29 @@ dc_restart:
 ##################
 
 app_bash:
-	${DOCKER_COMPOSE} exec -u www-data qvote-nginx-php-fpm bash
+	${DOCKER_COMPOSE} exec -u www-data yii2-nginx-php-fpm bash
 php: app_bash
 
 test:
-	${DOCKER_COMPOSE} exec -u www-data qvote-nginx-php-fpm bin/phpunit
+	${DOCKER_COMPOSE} exec -u www-data yii2-nginx-php-fpm bin/phpunit
 cache:
-	docker-compose -f ./docker/docker-compose.yml exec -u www-data qvote-nginx-php-fpm bin/console cache:clear
-	docker-compose -f ./docker/docker-compose.yml exec -u www-data qvote-nginx-php-fpm bin/console cache:clear --env=test
+	docker-compose -f ./docker/docker-compose.yml exec -u www-data yii2-nginx-php-fpm bin/console cache:clear
+	docker-compose -f ./docker/docker-compose.yml exec -u www-data yii2-nginx-php-fpm bin/console cache:clear --env=test
 
 ##################
 # Database
 ##################
 
 db_migrate:
-	${DOCKER_COMPOSE} exec -u www-data qvote-nginx-php-fpm bin/console doctrine:migrations:migrate --no-interaction
+	${DOCKER_COMPOSE} exec -u www-data yii2-nginx-php-fpm bin/console doctrine:migrations:migrate --no-interaction
 migrate: db_migrate
 
 db_diff:
-	${DOCKER_COMPOSE} exec -u www-data qvote-nginx-php-fpm bin/console doctrine:migrations:diff --no-interaction
+	${DOCKER_COMPOSE} exec -u www-data yii2-nginx-php-fpm bin/console doctrine:migrations:diff --no-interaction
 diff: db_diff
 
 db_drop:
-	docker-compose -f ./docker/docker-compose.yml exec -u www-data qvote-nginx-php-fpm bin/console doctrine:schema:drop --force
+	docker-compose -f ./docker/docker-compose.yml exec -u www-data yii2-nginx-php-fpm bin/console doctrine:schema:drop --force
 
 
 ##################
@@ -97,4 +97,4 @@ composer_validate:
 # Иначе VSCode - PHP Intelephense ругается и не понимает классы Симфони и прочих пакетов
 ####
 iam_special:
-	docker cp qvote-nginx-php-fpm:/var/www/vendor ./app
+	docker cp yii2-nginx-php-fpm:/var/www/vendor ./app
