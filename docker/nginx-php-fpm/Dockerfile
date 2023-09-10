@@ -13,8 +13,8 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; \
 
 COPY ./docker/nginx-php-fpm/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
-# Postgres
-RUN apk add --no-cache libpq-dev && docker-php-ext-install pdo_pgsql
+# MySQL
+RUN apk add --no-cache libpq-dev && docker-php-ext-install pdo_mysql
 
 # Nginx
 RUN apk add --update --no-cache nginx
@@ -42,13 +42,13 @@ WORKDIR /var/www
 ENV COMPOSER_ALLOW_SUPERUSER=1
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ARG BUILD_MODE=dev
-RUN if [ ${BUILD_MODE} = dev ]; \
-    then \
-      composer install --no-interaction; \
-    else \
-      composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader; \
-    fi;
-RUN chown -R www-data:www-data /var/www/vendor/
+# RUN if [ ${BUILD_MODE} = dev ]; \
+#     then \
+#       composer install --no-interaction; \
+#     else \
+#       composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader; \
+#     fi;
+# RUN chown -R www-data:www-data /var/www/vendor/
 
 EXPOSE 8080
 
